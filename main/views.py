@@ -5,6 +5,7 @@ from .models import Car, Client, Driver
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 # Create your views here.
+from django.views.generic import ListView, CreateView, DetailView
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Машины парка", 'url_name': 'cars'},
@@ -37,7 +38,6 @@ def login(request):
         return render(request, 'main/login.html', context=context)
     
     
-
 def contacts(request, id):
     url_id = id
     name = request.GET.get('name')
@@ -105,5 +105,20 @@ def add_client(request):
     
     return render(request, 'main/client_add.html', context=context)
     
+
+def car_detail(request, pk):
+    car = Car.objects.get(pk=pk)
+    title = 'Car detail'
+    context = {'object': car, 'title': title}
     
+    return render(request, 'main/car_detail.html', context=context)
+
+
+
+
+class CarList(ListView):
+    model = Car
+
+
+
         

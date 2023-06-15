@@ -1,0 +1,15 @@
+<table>
+    {% for car in object_list %}
+    <tr>
+        <td align="center" >{{car.id}}</td>
+        <td align="center">
+            <a href={% url 'car_detail' pk=car.id %}>{{car.brand}}</a>
+        </td>
+        
+        <td align="center">{{car.model}}</td>
+        <td align="center">{{car.color}}</td>
+        <td align="center">{{car.power}}</td>
+        <td align="center">{{car.year}}</td>
+     </tr>
+    {% endfor %}
+</table>
