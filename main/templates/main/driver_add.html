@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+ 
+{% block content %}
+<h1>{{title}}</h1>
+Добавить водителя:
+<form action="{% url 'add_driver' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить</button>
+</form>
+{% endblock %}

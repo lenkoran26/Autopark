@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+ 
+{% block content %}
+<h1>{{title}}</h1>
+Машины:
+<table id="cars" border="1">
+    <th>id</th>
+    <th>Марка</th>
+    <th>Модель</th>
+    <th>Цвет</th>
+    <th>Мощность</th>
+    <th>Год выпуска</th>
+{% for car in cars %}
+         <tr>
+            <td align="center" >{{car.id}}</td>
+            <td align="center">{{car.brand}}</td>
+            <td align="center">{{car.model}}</td>
+            <td align="center">{{car.color}}</td>
+            <td align="center">{{car.power}}</td>
+            <td align="center">{{car.year}}</td>
+         </tr>
+{% endfor %}
+
+</table>
+
+<p><a href="{% url 'add_car' %}">Добавить машину</a></p>
+{% endblock %}

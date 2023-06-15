@@ -1,0 +1,7 @@
+{% extends 'main/base.html' %}
+ 
+{% block content %}
+<h1>{{title}}</h1>
+Содержимое страницы Водитель
+<p><a href="{% url 'add_driver' %}">Добавить водителя</a></p>
+{% endblock %}
