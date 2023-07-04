@@ -69,7 +69,7 @@ class Employee(models.Model):
         return ' '.join([str(self.firstname), str(self.lastname)])
     
     def get_absolute_url(self):
-        return reverse('employee_list')
+        return reverse('main:employee_list')
 
     # def get_absolute_url(self):
     #     return reverse("author-detail", kwargs={"pk": self.pk})

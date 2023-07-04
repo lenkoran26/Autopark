@@ -21,6 +21,6 @@ urlpatterns = [
     path('employees/<int:pk>/delete/', EmployeeDelete.as_view(), name='employee-delete'), 
     path('employees/', EmployeeList.as_view(), name='employee_list'),
     path('employees/<int:pk>/', EmployeeDetail.as_view(), name='employee-detail'),
-    path('employees_form/', EmployeeCreate.as_view(), name='employee-create'),
+    path('employee_form/', EmployeeCreate.as_view(), name='employee-form'),
     
 ]

@@ -160,7 +160,7 @@ class EmployeeUpdate(UpdateView):
 class EmployeeDelete(DeleteView):
     model = Employee
     template_name = 'main/delete.html'
-    success_url = reverse_lazy('employee_list')
+    success_url = reverse_lazy('main:employee_list')
     
 
     
