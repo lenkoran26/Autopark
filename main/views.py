@@ -1,16 +1,22 @@
 import datetime
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.http import HttpResponse
 from .forms import CarForm, DriverForm, ClientForm
-from .models import Car, Client, Driver
+from .models import *
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
-# Create your views here.
-from django.views.generic import ListView, CreateView, DetailView
+from django.core.paginator import Paginator
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
 
-menu = [{'title': "О сайте", 'url_name': 'about'},
-        {'title': "Машины парка", 'url_name': 'cars'},
-        {'title': "Водители парка", 'url_name': 'drivers'},
-        {'title': "Клиенты", 'url_name': 'clients'}
+
+menu = [{'title': "О сайте", 'url_name': 'main:about'},
+        {'title': "Машины парка", 'url_name': 'main:cars'},
+        {'title': "Водители парка", 'url_name': 'main:drivers'},
+        {'title': "Клиенты", 'url_name': 'main:clients'},
+        {'title': "Сотрудники", 'url_name': 'main:employee_list'},
+
 ]
 
 def index(request):
@@ -22,21 +28,7 @@ def about(request):
     title = 'О сайте'
     context = {'title': title, 'menu': menu}
     return render(request, 'main/about.html', context=context)
-
-@csrf_protect
-def login(request):
-    title = 'Войти'
-    context = {'title': title, 'menu': menu}
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        return HttpResponse(f'Login - {username}, Password - {password}')
-        
-    
-    if request.method == 'GET':
-        return render(request, 'main/login.html', context=context)
-    
+  
     
 def contacts(request, id):
     url_id = id
@@ -52,15 +44,22 @@ def cars(request):
     context = {'title': title, 'menu': menu, 'cars': car}
     return render(request, 'main/cars.html', context=context)
 
+@login_required
 def drivers(request):
     title = 'Водители'
     context = {'title': title, 'menu': menu}
     return render(request, 'main/drivers.html', context=context)
 
+@login_required
 def clients(request):
     title = 'Клиенты'
     clients = Client.objects.all()
-    context = {'title': title, 'menu': menu, 'clients': clients}
+    paginator = Paginator(clients, 2)  # Show 25 contacts per page.
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    context = {'title': title, 'menu': menu, 'clients': clients, 'page_obj': page_obj}
+
     return render(request, 'main/clients.html', context=context)
 
 def add_car(request):
@@ -115,10 +114,57 @@ def car_detail(request, pk):
 
 
 
+class EmployeeList(ListView):
+    model = Employee
+    template_name = 'main/employee_list.html'
+    context_object_name = 'employees'
+    paginate_by = 4
+    
+    def get_context_data(self, **kwargs):
+        # получение общего контекста из родительского класса
+        context = super().get_context_data(**kwargs)
+        # изменение родительского контекста (добавление ключей словаря)
+        
+        context['title'] = 'Сотрудники'
+        context["count"] = Employee.objects.count()
+        context['menu'] = menu
+        return context
 
-class CarList(ListView):
-    model = Car
 
+class EmployeeDetail(DetailView):
+    model = Employee
+    template_name = 'main/employee_detail.html'
+    context_object_name = 'employee' 
+
+    def get_context_data(self, **kwargs):
+        # получение общего контекста из родительского класса
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Информация о сотруднике'
+        context['menu'] = menu
+
+        return context
+
+
+class EmployeeCreate(CreateView):
+    model = Employee
+    fields = '__all__'
+    template_name = 'main/employee_form.html'
+    
+
+class EmployeeUpdate(UpdateView):
+    model = Employee
+    fields = '__all__'
+    template_name = 'main/employee_update.html'
+    
+
+class EmployeeDelete(DeleteView):
+    model = Employee
+    template_name = 'main/delete.html'
+    success_url = reverse_lazy('employee_list')
+    
+
+    
+    
 
 
         

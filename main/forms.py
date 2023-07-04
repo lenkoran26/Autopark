@@ -29,9 +29,7 @@ class ClientForm(ModelForm):
     class Meta:
         model = Client
         exclude = ['age', 'created_at']
-        # widgets = {
-        #     'age': forms.HiddenInput(),
-        # }
+        
     
     birthday = forms.DateField(input_formats=DATE_INPUT_FORMATS, label='Дата рождения')
     

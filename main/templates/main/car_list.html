@@ -3,7 +3,7 @@
     <tr>
         <td align="center" >{{car.id}}</td>
         <td align="center">
-            <a href={% url 'car_detail' pk=car.id %}>{{car.brand}}</a>
+            <a href="{% url 'main:car_detail' pk=car.id %}">{{car.brand}}</a>
         </td>
         
         <td align="center">{{car.model}}</td>

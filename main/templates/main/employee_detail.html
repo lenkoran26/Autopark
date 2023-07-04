@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+ 
+{% block content %}
+<h1>{{title}}</h1>
+<ul>
+<li>Имя - {{employee.firstname}}</li>
+<li>Фамилия - {{employee.lastname}}</li>
+<li>Дата рождения - {{employee.birthday}}</li>
+<li>Должность - {{employee.position}}</li>
+<li>Образование - {{employee.education}}</li>
+</ul>
+<a href="{% url 'main:employee-update' pk=employee.id %}"> Изменить </a>
+<p><a href="{% url 'main:employee-delete' pk=employee.id %}"> Удалить </a></p>
+{% endblock %}

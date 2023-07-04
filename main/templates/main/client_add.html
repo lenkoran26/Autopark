@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{title}}</h1>
 Добавить клиента:
-<form action="{% url 'add_client' %}" method="post">
+<form action="{% url 'main:add_client' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Добавить</button>

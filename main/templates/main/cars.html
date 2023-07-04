@@ -14,7 +14,7 @@
          <tr>
             <td align="center" >{{car.id}}</td>
             <td align="center">
-                <a href={% url 'car_detail' pk=car.id %}>{{car.brand}}</a>
+                <a href="{% url 'main:car_detail' pk=car.id %}">{{car.brand}}</a>
             </td>
             
             <td align="center">{{car.model}}</td>
@@ -26,5 +26,7 @@
 
 </table>
 
-<p><a href="{% url 'add_car' %}">Добавить машину</a></p>
+{% if user.is_authenticated %}
+<p><a href="{% url 'main:add_car' %}">Добавить машину</a></p>
+{% endif %}
 {% endblock %}

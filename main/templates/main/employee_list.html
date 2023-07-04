@@ -2,35 +2,35 @@
  
 {% block content %}
 <h1>{{title}}</h1>
+Содержимое страницы Сотрудники
 
-Клиенты:
-<table id="clients" border="1">
+<table id="employeey" border="1">
     <th>id</th>
     <th>Имя</th>
     <th>Фамилия</th>
     <th>Дата рождения</th>
-    <th>Возраст</th>
-    <th>Город</th>
-    <th>Телефон</th>
-    <th>Эл. почта</th>
-    <th>Дата создания</th>
+    <th>Должность</th>
+    <th>Образование</th>
 
-    {% for client in page_obj %}
+    {% for emp in page_obj %}
          <tr>
-            <td align="center" >{{client.id}}</td>
-            <td align="center">{{client.name}}</td>
-            <td align="center">{{client.last_name}}</td>
-            <td align="center">{{client.birthday}}</td>
-            <td align="center">{{client.age}}</td>
-            <td align="center">{{client.city}}</td>
-            <td align="center">{{client.phone}}</td>
-            <td align="center">{{client.email}}</td>
-            <td align="center">{{client.created_at}}</td>
+            <td align="center" >{{emp.id}}</td>
+            <td align="center">
+                <a href="{% url 'main:employee-detail' pk=emp.id %}">{{emp.firstname}}</a>
+            </td>
+            <td align="center">{{emp.lastname}}</td>
+            <td align="center">{{emp.birthday}}</td>
+            <td align="center">{{emp.position}}</td>
+            <td align="center">{{emp.education}}</td>
          </tr>
 {% endfor %}
 
 </table>
-<p><a href="{% url 'main:add_client' %}">Добавить клиента</a></p>
+Количество - {{count}}
+
+{% comment %}
+<p><a href="{% url 'employee_create' %}">Добавить сотрудника</a></p>
+{% endcomment %}
 
 <div class="pagination">
     <span class="step-links">
