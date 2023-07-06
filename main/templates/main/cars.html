@@ -3,6 +3,17 @@
 {% block content %}
 <h1>{{title}}</h1>
 
+<form method="get">
+    {{ filter.form.as_p }}
+    <input type="submit" />
+</form>
+
+<form action="{% url 'main:car-search' %}" method="get">
+    <input type="search" name="query">
+    <button type="submit">Поиск</button>
+</form>
+
+
 <table id="cars" border="1">
     <th>id</th>
     <th>Марка</th>
@@ -10,7 +21,7 @@
     <th>Цвет</th>
     <th>Мощность</th>
     <th>Год выпуска</th>
-{% for car in cars %}
+{% for car in filter.qs %}
          <tr>
             <td align="center" >{{car.id}}</td>
             <td align="center">
@@ -26,7 +37,7 @@
 
 </table>
 
-{% if user.is_authenticated %}
+{% if user.is_staff %}
 <p><a href="{% url 'main:add_car' %}">Добавить машину</a></p>
 {% endif %}
 {% endblock %}

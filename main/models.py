@@ -20,19 +20,19 @@ class Driver(models.Model):
         verbose_name_plural = 'Люди'
 
 
-class Car(models.Model):
-    brand = models.CharField(max_length=30, verbose_name='Марка')
-    model = models.CharField(max_length=30, verbose_name='Модель')
-    color = models.CharField(max_length=30, verbose_name='Цвет')
-    power = models.IntegerField(verbose_name='Мощность')
-    year = models.IntegerField(verbose_name='Год')
+# class Car(models.Model):
+#     brand = models.CharField(max_length=30, verbose_name='Марка')
+#     model = models.CharField(max_length=30, verbose_name='Модель')
+#     color = models.CharField(max_length=30, verbose_name='Цвет')
+#     power = models.IntegerField(verbose_name='Мощность')
+#     year = models.IntegerField(verbose_name='Год')
 
-    def __str__(self):
-        return ' '.join([str(self.brand), str(self.model)])
+#     def __str__(self):
+#         return ' '.join([str(self.brand), str(self.model)])
 
-    class Meta:
-        verbose_name = 'Машина'
-        verbose_name_plural = 'Машины'
+#     class Meta:
+#         verbose_name = 'Машина'
+#         verbose_name_plural = 'Машины'
 
 
 class Client(models.Model):
@@ -71,12 +71,47 @@ class Employee(models.Model):
     def get_absolute_url(self):
         return reverse('main:employee_list')
 
-    # def get_absolute_url(self):
-    #     return reverse("author-detail", kwargs={"pk": self.pk})
-
+   
     class Meta:
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'
+
+
+class Car_brand(models.Model):
+    name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Бренд'
+        verbose_name_plural = 'Бренды'
+
+
+
+class Car(models.Model):
+
+    colors = (
+        ('черный', 'черный'),
+        ('белый', 'белый'),
+        ('желтый', 'желтый'),
+        ('красный', 'красный'),
+        ('зеленый', 'зеленый'),
+        ('синий', 'синий'),
+    )
+
+    brand = models.ForeignKey(Car_brand, on_delete=models.CASCADE, related_name='cars', verbose_name='Марка')
+    model = models.CharField(max_length=30, verbose_name='Модель')
+    color = models.CharField(max_length=20, choices=colors, null=False)
+    power = models.IntegerField(verbose_name='Мощность')
+    year = models.IntegerField(verbose_name='Год')
+
+    def __str__(self):
+        return ' '.join([str(self.brand), str(self.model)])
+
+    class Meta:
+        verbose_name = 'Машина'
+        verbose_name_plural = 'Машины'
 
 
 

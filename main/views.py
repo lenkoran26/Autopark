@@ -5,10 +5,13 @@ from django.http import HttpResponse
 from .forms import CarForm, DriverForm, ClientForm
 from .models import *
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_protect
+from django.db.models import Q
 from django.core.paginator import Paginator
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.admin.views.decorators import staff_member_required
+from .filters import CarFilter
+
 
 
 menu = [{'title': "О сайте", 'url_name': 'main:about'},
@@ -37,14 +40,16 @@ def contacts(request, id):
     get_params = {'name': name, 'age': age}
     return HttpResponse(f'Page contacts, url_parametr_id = {url_id}, get_params - {get_params}')
 
-def cars(request):
+def cars(request, cars=None):
     title = 'Машины'
-    car = Car.objects.all()
+    f = CarFilter(request.GET, queryset=Car.objects.all())
+    if not request.GET.get('query'):
+        cars = Car.objects.all()
 
-    context = {'title': title, 'menu': menu, 'cars': car}
+    context = {'title': title, 'menu': menu, 'cars': cars, 'filter': f}
     return render(request, 'main/cars.html', context=context)
 
-@login_required
+
 def drivers(request):
     title = 'Водители'
     context = {'title': title, 'menu': menu}
@@ -62,6 +67,7 @@ def clients(request):
 
     return render(request, 'main/clients.html', context=context)
 
+@staff_member_required
 def add_car(request):
     if request.method =='GET':
         title = 'Добавить машину'
@@ -72,13 +78,13 @@ def add_car(request):
     if request.method == 'POST':
         carform = CarForm(request.POST)
         if carform.is_valid():
-            car = Car()
-            car.brand = carform.cleaned_data['brand']
-            car.model = carform.cleaned_data['model']
-            car.color = carform.cleaned_data['color']
-            car.power = carform.cleaned_data['power']
-            car.year = carform.cleaned_data['year']
-            car.save()
+            # car = Car()
+            # car.brand = carform.cleaned_data['brand']
+            # car.model = carform.cleaned_data['model']
+            # car.color = carform.cleaned_data['color']
+            # car.power = carform.cleaned_data['power']
+            # car.year = carform.cleaned_data['year']
+            carform.save()
         return cars(request)
 
 def add_driver(request):
@@ -162,6 +168,16 @@ class EmployeeDelete(DeleteView):
     template_name = 'main/delete.html'
     success_url = reverse_lazy('main:employee_list')
     
+
+def car_search(request):
+    if request.method == 'GET':
+        query = request.GET.get('query')
+        ft = Q(model__icontains=query) | Q(year__icontains=query) | Q(brand__name__contains=query)
+        results = Car.objects.filter(ft)
+        
+        return cars(request, cars = results)
+
+
 
     
     

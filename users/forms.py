@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
-
+from django.utils.translation import gettext as _
 from django import forms
 
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput, error_messages={'required': 'Please let us know what to call you!'})
     password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
+    
 
     class Meta:
         model = User
@@ -14,15 +15,6 @@ class UserRegistrationForm(forms.ModelForm):
             'username': 'Только буквы, цифры и символы @/./+/-/_',
         }
         
-        error_messages = {
-            'username': {
-                'required': 'Это поле обязательно для заполнения',
-                 },
-            
-            'password': {
-                'required': 'Это поле обязательно для заполнения',
-            },
-        }
 
     def clean_password2(self):
         cd = self.cleaned_data
