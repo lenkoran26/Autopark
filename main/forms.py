@@ -24,11 +24,10 @@ class CarForm(forms.ModelForm):
         fields = '__all__'
 
 
-class DriverForm(forms.Form):
-    name = forms.CharField(max_length=50, label='Имя водителя')
-    age = forms.IntegerField(label='Возраст', min_value=18, max_value=120)
-    city = forms.CharField(max_length=50, label='Город', required=False)
-
+class DriverForm(forms.ModelForm):
+    class Meta:
+        model = Driver
+        exclude = ['is_activated']
 
 class ClientForm(ModelForm):
     class Meta:
@@ -38,5 +37,10 @@ class ClientForm(ModelForm):
     
     birthday = forms.DateField(input_formats=DATE_INPUT_FORMATS, label='Дата рождения')
     
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
 
 

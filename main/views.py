@@ -19,6 +19,7 @@ menu = [{'title': "О сайте", 'url_name': 'main:about'},
         {'title': "Водители парка", 'url_name': 'main:drivers'},
         {'title': "Клиенты", 'url_name': 'main:clients'},
         {'title': "Сотрудники", 'url_name': 'main:employee_list'},
+        {'title': "Заказы", 'url_name': 'main:order_list'},
 
 ]
 
@@ -52,7 +53,8 @@ def cars(request, cars=None):
 
 def drivers(request):
     title = 'Водители'
-    context = {'title': title, 'menu': menu}
+    drivers = Driver.objects.all()
+    context = {'title': title, 'menu': menu, 'objects': drivers}
     return render(request, 'main/drivers.html', context=context)
 
 @login_required
@@ -88,11 +90,18 @@ def add_car(request):
         return cars(request)
 
 def add_driver(request):
-    title='Добавить водителя'
-    form = DriverForm()
-    context = {'title': title, 'menu': menu, 'form': form}
-    return render(request, 'main/driver_add.html', context=context)
-
+    if request.method =='GET':
+        title = 'Добавить Водителя'
+        form = DriverForm()
+        context = {'title': title, 'menu': menu, 'form': form}
+        return render(request, 'main/driver_add.html', context=context)
+    
+    if request.method == 'POST':
+        driverform = DriverForm(request.POST)
+        if driverform.is_valid():
+            driverform.save()
+            return drivers(request)
+    
 def add_client(request):
     title = 'Добавить клиента'
     if request.method == 'POST':
@@ -179,7 +188,16 @@ def car_search(request):
 
 
 
-    
+class OrderCreate(CreateView):
+    model = Order
+    fields = '__all__'
+    template_name = 'main/order_form.html'
+
+
+class OrderList(ListView):
+    model = Order
+    template_name = 'main/order_list.html'
+    context_object_name = 'objects'
     
 
 

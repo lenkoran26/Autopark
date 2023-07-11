@@ -10,14 +10,14 @@ class Driver(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя')
     age = models.IntegerField(verbose_name='Возраст')
     city = models.CharField(max_length=100, verbose_name='Город')
-    is_activated = models.BooleanField(verbose_name='Активация')
+    is_activated = models.BooleanField(verbose_name='Активация', default=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = 'Человек'
-        verbose_name_plural = 'Люди'
+        verbose_name = 'Водитель'
+        verbose_name_plural = 'Водители'
 
 
 # class Car(models.Model):
@@ -77,7 +77,7 @@ class Employee(models.Model):
         verbose_name_plural = 'Сотрудники'
 
 
-class Car_brand(models.Model):
+class CarBrand(models.Model):
     name = models.CharField(max_length=100)
     
     def __str__(self):
@@ -86,7 +86,6 @@ class Car_brand(models.Model):
     class Meta:
         verbose_name = 'Бренд'
         verbose_name_plural = 'Бренды'
-
 
 
 class Car(models.Model):
@@ -100,7 +99,7 @@ class Car(models.Model):
         ('синий', 'синий'),
     )
 
-    brand = models.ForeignKey(Car_brand, on_delete=models.CASCADE, related_name='cars', verbose_name='Марка')
+    brand = models.ForeignKey(CarBrand, on_delete=models.CASCADE, related_name='cars', verbose_name='Марка')
     model = models.CharField(max_length=30, verbose_name='Модель')
     color = models.CharField(max_length=20, choices=colors, null=False)
     power = models.IntegerField(verbose_name='Мощность')
@@ -114,5 +113,21 @@ class Car(models.Model):
         verbose_name = 'Машина'
         verbose_name_plural = 'Машины'
 
+
+class Order(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.DO_NOTHING, related_name='car', verbose_name='Машина')
+    driver = models.ForeignKey(Driver, on_delete=models.DO_NOTHING, related_name='driver', verbose_name='Водитель')
+    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, related_name='client', verbose_name='Клиент')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return ' '.join([str(self.id), str(self.client)])
+    
+    def get_absolute_url(self):
+        return reverse('main:order_list')
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
 
 

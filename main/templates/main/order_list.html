@@ -1,0 +1,45 @@
+{% extends 'main/base.html' %}
+ 
+{% block content %}
+<h1>{{title}}</h1>
+Заказы
+
+<table id="orders" border="1">
+    <th>Номер заказа</th>
+    <th>Клиент</th>
+    <th>Машина</th>
+    <th>Водитель</th>
+    <th>Дата создания</th>
+    
+    {% for order in objects %}
+         <tr>
+            <td align="center" >{{order.id}}</td>
+            <td align="center">{{order.client}}</td>
+            <td align="center">{{order.car}}</td>
+            <td align="center">{{order.driver}}</td>
+            <td align="center">{{order.created_at}}</td>
+         </tr>
+    {% endfor %}
+
+</table>
+
+<p><a href="{% url 'main:order-form' %}">Создать заказ</a></p>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
