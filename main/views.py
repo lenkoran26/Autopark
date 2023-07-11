@@ -76,7 +76,7 @@ def add_car(request):
         return render(request, 'main/car_add.html', context=context)
     
     if request.method == 'POST':
-        carform = CarForm(request.POST)
+        carform = CarForm(request.POST, request.FILES)
         if carform.is_valid():
             # car = Car()
             # car.brand = carform.cleaned_data['brand']
