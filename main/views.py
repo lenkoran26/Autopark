@@ -2,7 +2,7 @@ import datetime
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.http import HttpResponse
-from .forms import CarForm, DriverForm, ClientForm
+from .forms import *
 from .models import *
 from django.shortcuts import render
 from django.db.models import Q
@@ -162,7 +162,8 @@ class EmployeeDetail(DetailView):
 
 class EmployeeCreate(CreateView):
     model = Employee
-    fields = '__all__'
+    # fields = '__all__'
+    form_class = EmployeeForm
     template_name = 'main/employee_form.html'
     
 
@@ -185,7 +186,6 @@ def car_search(request):
         results = Car.objects.filter(ft)
         
         return cars(request, cars = results)
-
 
 
 class OrderCreate(CreateView):

@@ -44,3 +44,10 @@ class OrderForm(forms.ModelForm):
         fields = '__all__'
 
 
+class EmployeeForm(forms.ModelForm):
+    birthday = forms.DateField(input_formats=DATE_INPUT_FORMATS, label='Дата рождения')
+    class Meta:
+        model = Employee
+        fields = '__all__'
+       
+
