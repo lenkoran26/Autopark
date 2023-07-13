@@ -4,8 +4,8 @@
 {% block content %}
 <h1>{{title}}</h1>
 {% if object.image %}
-<a href="{{object.image.url}}" target="_blank">
-{% thumbnail object.image "200x100" crop="center" as im %}
+<a href="{{ object.image.url }}" target="_blanc">
+{% thumbnail object.image "300x200" crop="center" as im %}
   <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
 </a>
 {% endthumbnail %} 

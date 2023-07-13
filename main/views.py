@@ -41,11 +41,12 @@ def contacts(request, id):
     get_params = {'name': name, 'age': age}
     return HttpResponse(f'Page contacts, url_parametr_id = {url_id}, get_params - {get_params}')
 
-def cars(request, cars=None):
+def cars(request):
+    
     title = 'Машины'
     f = CarFilter(request.GET, queryset=Car.objects.all())
-    if not request.GET.get('query'):
-        cars = Car.objects.all()
+    # if not request.GET.get('query'):
+    #     cars = Car.objects.all()
 
     context = {'title': title, 'menu': menu, 'cars': cars, 'filter': f}
     return render(request, 'main/cars.html', context=context)
@@ -182,7 +183,8 @@ class EmployeeDelete(DeleteView):
 def car_search(request):
     if request.method == 'GET':
         query = request.GET.get('query')
-        ft = Q(model__icontains=query) | Q(year__icontains=query) | Q(brand__name__contains=query)
+        # ft = Q(model__icontains=query) | Q(year__icontains=query) | Q(brand__name__contains=query)
+        ft = Q(model__icontains=query) | Q(brand__name__icontains=query) | Q(year__icontains=query)
         results = Car.objects.filter(ft)
         
         return cars(request, cars = results)
